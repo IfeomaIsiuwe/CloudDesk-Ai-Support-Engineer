@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Retrieved Context</title>
+<style>
+  body { font-family: sans-serif; max-width: 900px; margin: 40px auto; padding: 0 20px; line-height: 1.5; }
+  hr { border: none; border-top: 1px solid #ccc; margin: 24px 0; }
+  code, pre { background: #f5f5f5; padding: 2px 4px; border-radius: 4px; }
+</style>
+</head>
+<body>
+<p>[Hc-101 Integrating-Clouddesk-With-Slack (help_center_articles)]
+Integrating CloudDesk with Slack
+Doc ID: HC-101  |  Source type: help_center_article  |  Title: Integrating CloudDesk with Slack  |  Last updated: 2026-06-18  | 
+Version: v3.6
+CloudDesk can post real-time notifications to Slack whenever a ticket is created, updated, or replied to —
+keeping your team in the loop without needing to check the dashboard.
+Step 1: Connect your Slack workspace
+Go to Settings → Integrations → Slack → Connect. You'll be redirected to Slack to authorize CloudDesk.
+Approve</p>
+<hr />
+<p>[Ticket tkt_10021: Slack messages not posting to channel (support_ticket)]
+Ticket [tkt_10021] Subject: Slack messages not posting to channel
+Question: We connected CloudDesk to Slack but new tickets aren't showing up in #support-alerts.
+Resolution: Confirmed the OAuth token had an expired scope after a Slack workspace admin change. Reconnected the integration under Settings &gt; Integrations &gt; Slack and re-selected the channel; messages resumed within a minute.</p>
+<hr />
+<p>[Authentication (api_documentation)]
+1. API Key Authentication</p>
+<p>Every CloudDesk workspace can generate API keys from <strong>Settings → Developer → API Keys</strong>. Keys are scoped to a workspace and inherit the permissions of the role that created them.</p>
+<h3>Making an authenticated request</h3>
+<p>Include the key in the <code>Authorization</code> header as a Bearer token:</p>
+<pre><code>GET /v1/tickets HTTP/1.1
+Host: api.clouddesk.io
+Authorization: Bearer cd_live_8f2a1c9e4b7d4e2a9c1f0a6b3d7e9f10
+</code></pre>
+<h3>Key types</h3>
+<table>
+<thead>
+<tr>
+<th>Prefix</th>
+<th>Environment</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>`cd_l</td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</body>
+</html>
