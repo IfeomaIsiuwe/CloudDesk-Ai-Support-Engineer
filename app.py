@@ -4,6 +4,7 @@ Entry point for local runs and Hugging Face Spaces deployment.
 """
 
 import gradio as gr
+import os
 from huggingface_hub import InferenceClient
 from retrieval_pipeline import load_config, get_vector_store, run_rag_pipeline
 
@@ -35,4 +36,7 @@ demo = gr.ChatInterface(
 )
 
 if __name__ == "__main__":
-    demo.launch()
+    demo.launch(
+    server_name="0.0.0.0",
+    server_port=int(os.environ.get("PORT", 7860))
+)
