@@ -1,4 +1,5 @@
 import os
+import time
 import streamlit as st
 from huggingface_hub import InferenceClient
 
@@ -61,6 +62,8 @@ try:
             st.write(question)
 
         with st.chat_message("assistant"):
+            start_time = time.perf_counter()
+
             with st.spinner("Searching CloudDesk knowledge base..."):
                 result = run_rag_pipeline(
                     cfg,
@@ -68,8 +71,11 @@ try:
                     client,
                     question,
                 )
+                
+            response_time = time.perf_counter() - start_time
 
             st.markdown(result["answer"])
+            st.write(f"**Response time:** {response_time:.2f} seconds")
 
             st.divider()
 
