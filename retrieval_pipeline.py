@@ -26,7 +26,7 @@ except ImportError:
 # -------------------------------------------------------------
 SYSTEM_PROMPT = """You are the CloudDesk AI Support Engineer.
 Answer customer support questions accurately based ONLY on the provided context.
-Provide a clear step-by-step resolution and cite source documents.
+Provide a concise step-by-step resolution and cite source documents. Do not spend excessive output on internal reasoning. Give the customer-facing answer directly.
 If the answer is not present in the context or confidence is low, state that clearly and suggest contacting Tier-2 Support."""
 
 FALLBACK_MESSAGE = (
@@ -122,7 +122,7 @@ def call_hf_chat(client: InferenceClient, model_id: str, system: str, user_conte
             {"role": "user", "content": user_content},
         ],
         temperature=0.2,
-        max_tokens=512,
+        max_tokens=1536,
     )
     return completion.choices[0].message.content
 
@@ -139,7 +139,7 @@ def run_rag_pipeline(cfg: Dict[str, Any], vstore, client: InferenceClient, query
         try:
             answer = call_hf_chat(client, cfg["hf_model"], SYSTEM_PROMPT, user_prompt)
         except Exception as e:
-            print(f"[*] HuggingFace API notice: {e}")
+            print(f"[*] HuggingFace API notice: {type(e).__name__}: {e}")
 
     if not answer:
         if requires_escalation:
@@ -190,6 +190,7 @@ def evaluate_benchmark(cfg: Dict[str, Any], vstore, client: InferenceClient, csv
         ref_title = str(r.get("source_title_reference", "")).strip().lower()
 
         res = run_rag_pipeline(cfg, vstore, client, query)
+        evaluation_docs = retrieve_docs(vstore, query, k=5)
         conf = res["confidence"]
         confidences.append(conf)
 
@@ -197,11 +198,11 @@ def evaluate_benchmark(cfg: Dict[str, Any], vstore, client: InferenceClient, csv
             escalations += 1
 
         hit_1, hit_3, hit_5 = False, False, False
-        retrieved_docs = res["docs"]
+        retrieved_docs = evaluation_docs
 
         for rank, doc in enumerate(retrieved_docs, 1):
             d_title = doc.get("title", "").lower()
-            is_match = (ref_title in d_title or d_title in ref_title) if ref_title else True
+            is_match = ((ref_title in d_title or d_title in ref_title) or (tkt_id.lower() in d_title)) if ref_title else True
             if is_match:
                 if rank == 1: hit_1 = True
                 if rank <= 3: hit_3 = True

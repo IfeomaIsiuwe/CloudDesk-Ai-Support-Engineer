@@ -43,7 +43,7 @@ The current dataset has **105 processed chunks** with metadata such as source ty
 * **ChromaDB**
 * **FAISS**
 * **Hugging Face**
-* **Gradio**
+* **Streamlit**
 * **Jupyter Notebook**
 * **Git/GitHub**
 
@@ -110,9 +110,9 @@ The evaluation looks at:
 
 Further testing and optimisation are being carried out as part of the project.
 
-## Gradio Interface
+## Streamlit Interface
 
-A simple Gradio chat interface was developed to interact with the support assistant.
+A simple Streamlit chat interface was developed to interact with the support assistant.
 
 Example questions:
 
@@ -132,6 +132,7 @@ The application returns the generated response along with confidence and support
 CloudDesk-Ai-Support-Engineer/
 │
 ├── app.py
+├── streamlit_app.py
 ├── retrieval_pipeline.py
 ├── requirements.txt
 ├── context_str_view.html
