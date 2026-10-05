@@ -132,7 +132,7 @@ The application returns the generated response along with confidence and support
 CloudDesk-Ai-Support-Engineer/
 │
 ├── app.py
-├── streamlit_app.py
+├── streamlit_app .py
 ├── retrieval_pipeline.py
 ├── requirements.txt
 ├── context_str_view.html
@@ -150,6 +150,18 @@ CloudDesk-Ai-Support-Engineer/
 └── vector_db/
     └── chunks_store.json
 ```
+
+## Documentation
+
+For detailed guides and references, see the `docs/` folder:
+
+* **[QUICKSTART.md](docs/QUICKSTART.md)** - Getting started guide
+* **[DEPLOY_STREAMLIT_CLOUD.md](docs/DEPLOY_STREAMLIT_CLOUD.md)** - Cloud deployment instructions
+* **[SYSTEM_SUMMARY.txt](docs/SYSTEM_SUMMARY.txt)** - Complete system architecture
+* **[ONE_PAGE_SUMMARY.txt](docs/ONE_PAGE_SUMMARY.txt)** - Quick 2-minute overview
+* **[ARCHITECTURE_EXPLAINED.md](docs/ARCHITECTURE_EXPLAINED.md)** - Detailed architecture with diagrams
+* **[README_REFERENCE_GUIDE.md](docs/README_REFERENCE_GUIDE.md)** - Master index of all documentation
+* **[FRONTEND_BACKEND_CLARIFICATION.md](docs/FRONTEND_BACKEND_CLARIFICATION.md)** - Frontend/backend explanation
 
 ## Project Goals
 
