@@ -41,7 +41,12 @@ class EscalationRules:
     def create_escalation(self, query_id: str, reason: str, priority: str = "medium") -> str:
         """Create escalation ticket"""
         ticket_id = self.db.insert_escalation(query_id, reason, priority)
-        
+
+        # Update the original query status
+        self.db.execute_update(
+            "UPDATE queries SET status = 'escalated' WHERE id = ?",
+            (query_id,)
+        )    
         # Log escalation
         self.db.insert_audit_log(
             "system", "create_escalation", "escalation_ticket", ticket_id, None, reason
