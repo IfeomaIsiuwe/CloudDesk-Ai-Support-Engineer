@@ -126,7 +126,33 @@ def call_hf_chat(client: InferenceClient, model_id: str, system: str, user_conte
     )
     return completion.choices[0].message.content
 
-def run_rag_pipeline(cfg: Dict[str, Any], vstore, client: InferenceClient, query: str) -> Dict[str, Any]:
+
+def stream_hf_chat(client: InferenceClient, model_id: str, system: str, user_content: str, on_token) -> str:
+    stream = client.chat.completions.create(
+        model=model_id,
+        messages=[
+            {"role": "system", "content": system},
+            {"role": "user", "content": user_content},
+        ],
+        temperature=0.2,
+        max_tokens=1536,
+        stream=True,
+    )
+
+    answer = ""
+
+    for chunk in stream:
+        if chunk.choices and chunk.choices[0].delta.content:
+            token = chunk.choices[0].delta.content
+            answer += token
+
+            if len(answer) % 100 < len(token):
+                on_token(answer)
+
+    on_token(answer)
+    return answer
+
+def run_rag_pipeline(cfg: Dict[str, Any], vstore, client: InferenceClient, query: str, on_token=None) -> Dict[str, Any]:
     docs = retrieve_docs(vstore, query, k=3)
     context, cites = format_docs(docs)
     confidence = compute_confidence(docs)
@@ -137,7 +163,14 @@ def run_rag_pipeline(cfg: Dict[str, Any], vstore, client: InferenceClient, query
     answer = ""
     if client and cfg.get("hf_token"):
         try:
-            answer = call_hf_chat(client, cfg["hf_model"], SYSTEM_PROMPT, user_prompt)
+            if on_token:
+                answer = stream_hf_chat(
+                    client, cfg["hf_model"], SYSTEM_PROMPT, user_prompt, on_token
+                )
+            else:
+                answer = call_hf_chat(
+                    client, cfg["hf_model"], SYSTEM_PROMPT, user_prompt
+                )
         except Exception as e:
             print(f"[*] HuggingFace API notice: {type(e).__name__}: {e}")
 
